@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import QRScanner from './pages/Scanner';
@@ -16,7 +17,8 @@ function App() {
         <Navbar />
         <main className="container mx-auto p-4">
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Home />} /> {/* New homepage as default */}
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/scanner" element={<QRScanner />} />
             <Route path="/dashboard" element={<Dashboard />} />
