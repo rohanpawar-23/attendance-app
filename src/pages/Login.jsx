@@ -1,63 +1,114 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ setRole }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('student');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Login:', { email, password, userType });
-    setRole(userType); // Set role based on selection
+
+    if (!userType) {
+      alert("Please select a role before logging in!");
+      return;
+    }
+
+    console.log("Login:", { email, password, userType });
+
+    // Save role globally
+    setRole(userType);
+
+    // Redirect based on role
+    if (userType === "student") navigate("/dashboard");
+    else if (userType === "teacher") navigate("/teacher");
+    else if (userType === "admin") navigate("/admin");
   };
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 hover:scale-105">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center tracking-wide">Login</h2>
-      <div className="flex mb-6">
-        <button
-          onClick={() => setUserType('student')}
-          className={`w-1/2 p-3 rounded-l-lg ${userType === 'student' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'} font-semibold transition duration-200`}
-        >
-          Student Login
-        </button>
-        <button
-          onClick={() => setUserType('admin')}
-          className={`w-1/2 p-3 rounded-r-lg ${userType === 'admin' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'} font-semibold transition duration-200`}
-        >
-          Admin Login
-        </button>
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-gray-900 transition-colors duration-300">
+      <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md border border-gray-300 dark:border-gray-700">
+        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">
+          Login to Your Account
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Select Role */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
+              Select Role
+            </label>
+            <select
+              value={userType}
+              onChange={(e) => setUserType(e.target.value)}
+              className="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl 
+                         focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 
+                         bg-gray-100 dark:bg-gray-900 dark:text-gray-100 transition duration-200"
+              required
+            >
+              <option value="">Choose your role</option>
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
+              Email Address
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl 
+                         focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 
+                         bg-gray-100 dark:bg-gray-900 dark:text-gray-100 transition duration-200"
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl 
+                         focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 
+                         bg-gray-100 dark:bg-gray-900 dark:text-gray-100 transition duration-200"
+              required
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-gray-800 dark:bg-gray-100 dark:text-gray-900 text-white p-3 rounded-xl 
+                       hover:opacity-90 transition duration-300 font-semibold shadow-md"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Signup Redirect */}
+        <p className="text-center text-gray-700 dark:text-gray-400 text-sm mt-6">
+          Don't have an account?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-gray-900 dark:text-gray-200 hover:underline cursor-pointer"
+          >
+            Sign Up
+          </span>
+        </p>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-gray-700 text-sm font-semibold mb-2">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-            placeholder="your@email.com"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 font-semibold"
-        >
-          Sign In
-        </button>
-      </form>
     </div>
   );
 };
